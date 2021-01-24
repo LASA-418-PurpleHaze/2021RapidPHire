@@ -2,21 +2,21 @@
 package frc.robot;
 
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+//import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class HazyShooter extends Subsystem {
 
-    private static TalonSRX shooterTalon;
+    private static TalonFX shooterTalon;
     private static HazyIntake instance;
     
-    private static SmartDashboard smartdashboard;
+    //private static SmartDashboard smartdashboard;
 
     public HazyShooter(){
-        shooterTalon = new TalonSRX(RobotMap.SHOOTERTALONPORT);
+        shooterTalon = new TalonFX(RobotMap.SHOOTERTALONPORT);
     }
     
     // public void initialize(){

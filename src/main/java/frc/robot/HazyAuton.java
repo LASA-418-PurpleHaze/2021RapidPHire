@@ -2,12 +2,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import com.ctre.phoenix.sensors.PigeonIMU;
+//import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Timer;
 
 
 public class HazyAuton extends Subsystem {
@@ -16,8 +16,8 @@ public class HazyAuton extends Subsystem {
   private TalonSRX leftFrontTalon;
   private TalonSRX leftBackTalon;
   private TalonSRX rightBackTalon;
-  private PigeonIMU pigeon;
-  private double[] ypr;
+  //private PigeonIMU pigeon;
+  //private double[] ypr;
   boolean shouldTurn;
 
     public HazyAuton() {
