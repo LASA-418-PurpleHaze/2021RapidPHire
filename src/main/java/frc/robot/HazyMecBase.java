@@ -8,6 +8,10 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 
 public class HazyMecBase extends Subsystem{
@@ -23,6 +27,9 @@ public class HazyMecBase extends Subsystem{
     private double milStart;
     private double lastData;
     public static HazyMecBase instance;
+    //Limelight
+    double xOffset;
+    double yOffset;
     
     public HazyMecBase(){
       rightFrontTalon = new TalonSRX(RobotMap.RIGHTFRONTTALONPORT);
@@ -58,6 +65,11 @@ public class HazyMecBase extends Subsystem{
       Robot.hazyPort.enableTermination();
       delayed=true;
       turnDelay = true;
+
+      Robot.table = NetworkTableInstance.getDefault().getTable("limelight");
+      xOffset = 0;
+      yOffset = 0;
+      
     }
 
     public void initialize(){}
@@ -126,6 +138,46 @@ public class HazyMecBase extends Subsystem{
         leftBackTalon.set(ControlMode.PercentOutput, -wheelSpeeds[2]);
         rightBackTalon.set(ControlMode.PercentOutput, -wheelSpeeds[3]*-1);
     }
+
+    /* New Limelight Test Stuff
+    public void setLimelightX(){ //needs to be run periodically
+      NetworkTableEntry tx = Robot.table.getEntry("tx");
+      double x = tx.getDouble(0.0);
+      xOffset = x;
+    }
+
+    public void setLimelightY(){ //needs to be run periodically
+      NetworkTableEntry ty = Robot.table.getEntry("ty");
+      double y = ty.getDouble(0.0);
+      yOffset = y;
+    }
+
+    public void limeTurnToTarget(){
+      Robot.table.getEntry("ledMode").setNumber(3);
+      rightFrontTalon.config_kP(0, RobotMap.DRIVEP, 30);
+      rightBackTalon.config_kP(0, RobotMap.DRIVEP, 30);
+      leftFrontTalon.config_kP(0, RobotMap.DRIVEP, 30);
+      leftBackTalon.config_kP(0, RobotMap.DRIVEP, 30);
+      if (delayed){
+        milStart = java.lang.System.currentTimeMillis();
+        delayed = false;
+      }
+      if(java.lang.System.currentTimeMillis() > milStart + RobotMap.VISIONDELAY){
+        double turnPower = RobotMap.VISIONVELTURN * (xOffset-RobotMap.RIGHTSIDEOFFSET);
+        rightFrontTalon.set(ControlMode.Velocity,turnPower);
+        rightBackTalon.set(ControlMode.Velocity,turnPower);
+        leftFrontTalon.set(ControlMode.Velocity,turnPower);
+        leftBackTalon.set(ControlMode.Velocity,turnPower);
+      }
+    }
+
+    public void showLimeLight(){ //needs to be run periodically
+      //post to smart dashboard periodically
+      SmartDashboard.putNumber("LimelightX", xOffset);
+      SmartDashboard.putNumber("LimelightY", yOffset);
+      //SmartDashboard.putNumber("LimelightArea", area);
+    }
+    */
     
     public void goToTarget(){
       Robot.solenoidToLight.set(true);

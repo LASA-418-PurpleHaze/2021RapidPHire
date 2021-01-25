@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.cameraserver.*;
+import edu.wpi.first.networktables.NetworkTable;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -80,7 +82,10 @@ public class Robot extends TimedRobot {
   public static SerialPort hazyPort;
 
   //Vision Light
-  public static Solenoid solenoidToLight; 
+  public static Solenoid solenoidToLight;
+  //Limelight Setup
+  public static NetworkTable table; 
+  
 
   //Autonomous
   public static HazyAuton hazyAuton;
