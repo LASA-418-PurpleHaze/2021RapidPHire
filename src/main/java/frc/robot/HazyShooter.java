@@ -12,6 +12,7 @@ public class HazyShooter extends Subsystem {
 
     private static TalonSRX shooterTalon;
     private static HazyIntake instance;
+    public static double shooterEncoderSpeed;
     
     private static SmartDashboard smartdashboard;
 
@@ -31,6 +32,7 @@ public class HazyShooter extends Subsystem {
     public void UpdateRPM() {
         //System.out.println("SmartDashboard is a go");
         SmartDashboard.putNumber("TPR", shooterTalon.getSelectedSensorVelocity());
+        shooterEncoderSpeed = shooterTalon.getSelectedSensorVelocity();
 
     }
 

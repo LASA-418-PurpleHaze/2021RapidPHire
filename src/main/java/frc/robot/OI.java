@@ -46,7 +46,14 @@ public class OI{
 
     public void runMethods(){
         //Logic for the Shooter
-        if(controller.getHazyTriggers().getRightAxis()) //Shoots the ball with the bottom right trigger
+        // if(controller.getHazyTriggers().getRightAxis()) //Shoots the ball with the bottom right trigger
+        //     Robot.commandShooterSpit.execute(); 
+        // if(controller.getHazyTriggers().getLeftAxis()) //Sucks the ball in with bottom left trigger
+        //     Robot.commandShooterSwallow.execute();      
+        // else if(!controller.getHazyTriggers().getRightAxis() && !controller.getHazyTriggers().getLeftAxis())
+        //     Robot.commandShooterDefault.execute();
+
+        if(Robot.hazyShooter.shooterEncoderSpeed == -29000) //Shoots the ball with the bottom right trigger
             Robot.commandShooterSpit.execute(); 
         if(controller.getHazyTriggers().getLeftAxis()) //Sucks the ball in with bottom left trigger
             Robot.commandShooterSwallow.execute();      

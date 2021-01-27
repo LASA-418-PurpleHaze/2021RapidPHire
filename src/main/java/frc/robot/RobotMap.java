@@ -22,7 +22,8 @@ public class RobotMap { //Static port variables
     public static final double VISIONTURN = .001;
     public static final double VISIONVELTURN = 15.0;
     public static final double VISIONSPEED = .007;
-    public static final double SHOOTDISTANCE = 204;
+    public static final double SHOOTERENCODER = -29000;
+    public static final double SHOOTDISTANCE = 229; //204
     public static final double RIGHTSIDEOFFSET = 10.0;
     
     //ColorSensor
