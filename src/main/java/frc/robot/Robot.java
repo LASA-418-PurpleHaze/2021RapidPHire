@@ -84,7 +84,12 @@ public class Robot extends TimedRobot {
   //Vision Light
   public static Solenoid solenoidToLight;
   //Limelight Setup
+  public static HazyLimelight hazyLimelight;
   public static NetworkTable table; 
+  public static CommandLimelight commandLimelight;
+  public static CommandFollowLimelight commandFollowLimelight;
+  
+
   
 
   //Autonomous
@@ -113,10 +118,15 @@ public class Robot extends TimedRobot {
     commandTurnVision = new CommandTurnVision();
     commandToggleTurnDelay = new CommandToggleTurnDelay();
 
-    
+    //Limelight
+    hazyLimelight = new HazyLimelight();
+    commandLimelight = new CommandLimelight();
+    commandFollowLimelight = new CommandFollowLimelight();
+
     //Initialization Code for the Color Sensor and Arm
     hazyColorSensor = new HazyColorSensor();
     hazyColorArm = new HazyColorArm();
+
     //commandColor = new CommandColor();
     commandFoldUp = new CommandFoldUp();
     commandFoldDown = new CommandFoldDown();
@@ -124,7 +134,6 @@ public class Robot extends TimedRobot {
     commandColorArmDefault = new CommandColorArmDefault();
     commandToggleColorArm = new CommandToggleColorArm();
     
-
     //Initialization Code for the Intake
     hazyIntake = new HazyIntake();
     commandMoveIntakeDefault = new CommandMoveIntakeDefault();
@@ -133,7 +142,6 @@ public class Robot extends TimedRobot {
     commandSwitchIntakeDir = new CommandSwitchIntakeDir();
     commandStopSpinning = new CommandStopSpinning();
    
-
     //Initialization Code for End Arm
     hazyEndArm = new HazyEndArm();
     commandEndArmUp = new CommandEndArmUp();
@@ -200,6 +208,7 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().add(commandEndArmDefault);
     Scheduler.getInstance().add(commandLowFeedDefault);
     Scheduler.getInstance().add(commandHighFeedDefault);
+    //Scheduler.getInstance().add(commandLimelight);
     hazyOI = new OI(); //OI object for all the buttons and their resulting commands
   }
 

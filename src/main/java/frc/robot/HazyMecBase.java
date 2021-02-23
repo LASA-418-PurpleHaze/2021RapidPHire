@@ -23,13 +23,15 @@ public class HazyMecBase extends Subsystem{
     private double offset; 
     private boolean delayed;
     private boolean turnDelay;
-    private double distance;
+    private double distanceToTarget;
     private double milStart;
     private double lastData;
     public static HazyMecBase instance;
-    //Limelight
-    double xOffset;
-    double yOffset;
+
+    //Measurements for Distance Calculation
+    double heightOfTarget = 98.0;
+    double heightOfCamera = 22.0;
+    double angleOfCamera = 13.0;
     
     public HazyMecBase(){
       rightFrontTalon = new TalonSRX(RobotMap.RIGHTFRONTTALONPORT);
@@ -67,9 +69,6 @@ public class HazyMecBase extends Subsystem{
       turnDelay = true;
 
       Robot.table = NetworkTableInstance.getDefault().getTable("limelight");
-      xOffset = 0;
-      yOffset = 0;
-      
     }
 
     public void initialize(){}
@@ -139,17 +138,13 @@ public class HazyMecBase extends Subsystem{
         rightBackTalon.set(ControlMode.PercentOutput, -wheelSpeeds[3]*-1);
     }
 
-    /* New Limelight Test Stuff
-    public void setLimelightX(){ //needs to be run periodically
-      NetworkTableEntry tx = Robot.table.getEntry("tx");
-      double x = tx.getDouble(0.0);
-      xOffset = x;
-    }
+    // New Limelight Test Stuff
+    
+   
 
-    public void setLimelightY(){ //needs to be run periodically
-      NetworkTableEntry ty = Robot.table.getEntry("ty");
-      double y = ty.getDouble(0.0);
-      yOffset = y;
+    public void calculateDistance() {
+      double angleFromVision = Robot.hazyLimelight.yOffset;
+      distanceToTarget = (heightOfTarget-heightOfCamera) / Math.tan(angleOfCamera + angleFromVision);
     }
 
     public void limeTurnToTarget(){
@@ -163,7 +158,7 @@ public class HazyMecBase extends Subsystem{
         delayed = false;
       }
       if(java.lang.System.currentTimeMillis() > milStart + RobotMap.VISIONDELAY){
-        double turnPower = RobotMap.VISIONVELTURN * (xOffset-RobotMap.RIGHTSIDEOFFSET);
+        double turnPower = RobotMap.VISIONVELTURN * (Robot.hazyLimelight.xOffset-RobotMap.RIGHTSIDEOFFSET);
         rightFrontTalon.set(ControlMode.Velocity,turnPower);
         rightBackTalon.set(ControlMode.Velocity,turnPower);
         leftFrontTalon.set(ControlMode.Velocity,turnPower);
@@ -171,29 +166,25 @@ public class HazyMecBase extends Subsystem{
       }
     }
 
-    public void showLimeLight(){ //needs to be run periodically
-      //post to smart dashboard periodically
-      SmartDashboard.putNumber("LimelightX", xOffset);
-      SmartDashboard.putNumber("LimelightY", yOffset);
-      //SmartDashboard.putNumber("LimelightArea", area);
-    }
-    */
-    
-    public void goToTarget(){
+    public void limeGoToTarget(){
       Robot.solenoidToLight.set(true);
+      //System.out.println("Got HERE");
 
       if (delayed){
         milStart = java.lang.System.currentTimeMillis();
         delayed = false;
       }
       if(java.lang.System.currentTimeMillis() > milStart + RobotMap.VISIONDELAY){
+        //distance = calculateDistance();
+        //System.out.println("THIS IS DISTANCE: " + distanceToTarget);
         double travelDistance;
-        if(distance == -1.0)
+        if(distanceToTarget == -1.0)
           travelDistance = 0.0;
         else
-          travelDistance = RobotMap.SHOOTDISTANCE - distance;
+          travelDistance = RobotMap.SHOOTDISTANCE - distanceToTarget;
+        //System.out.println("THIS IS TRAVEL DISTANCE: " + travelDistance);
         //System.out.println(java.lang.System.currentTimeMillis()-lastData);
-        double turnPower = clamp(RobotMap.VISIONTURN * offset);
+        double turnPower = clamp(RobotMap.VISIONTURN * Robot.hazyLimelight.xOffset);
         if(turnPower > -0.13 && turnPower < 0.0 && Math.abs(offset) >= 3.0)
           turnPower = -0.13;
         else if(turnPower < 0.13 && turnPower > 0.0 && Math.abs(offset) >= 3.0)
@@ -204,8 +195,39 @@ public class HazyMecBase extends Subsystem{
         
         double forwardPower =clamp(-travelDistance*RobotMap.VISIONSPEED);
         //System.out.println("turn: " + turnPower + " forward: " + forwardPower);
-        driveCartesian(0, -forwardPower, -turnPower);
+        driveCartesian(0, forwardPower, -turnPower);
       }
+    }
+    //limelight ends here
+
+    
+    public void goToTarget(){
+      // Robot.solenoidToLight.set(true);
+
+      // if (delayed){
+      //   milStart = java.lang.System.currentTimeMillis();
+      //   delayed = false;
+      // }
+      // if(java.lang.System.currentTimeMillis() > milStart + RobotMap.VISIONDELAY){
+      //   double travelDistance;
+      //   if(distance == -1.0)
+      //     travelDistance = 0.0;
+      //   else
+      //     travelDistance = RobotMap.SHOOTDISTANCE - distance;
+      //   //System.out.println(java.lang.System.currentTimeMillis()-lastData);
+      //   double turnPower = clamp(RobotMap.VISIONTURN * offset);
+      //   if(turnPower > -0.13 && turnPower < 0.0 && Math.abs(offset) >= 3.0)
+      //     turnPower = -0.13;
+      //   else if(turnPower < 0.13 && turnPower > 0.0 && Math.abs(offset) >= 3.0)
+      //     turnPower = 0.13;
+        
+      //   if(Math.abs(offset) < 3.0)
+      //     turnPower = 0.0;
+        
+      //   double forwardPower =clamp(-travelDistance*RobotMap.VISIONSPEED);
+      //   //System.out.println("turn: " + turnPower + " forward: " + forwardPower);
+      //   driveCartesian(0, -forwardPower, -turnPower);
+      // }
     }
 
     public void turnToTarget(){
@@ -235,32 +257,32 @@ public class HazyMecBase extends Subsystem{
       turnDelay = true;
     }
 
-    public void readData(){
-      String data = Robot.hazyPort.readString();
+    // public void readData(){
+    //   String data = Robot.hazyPort.readString();
       
-      //System.out.println(data);
-      if(data.equals("none")){
-        offset = 0.0;
-        distance = -1.0;
-      }
-      if(!data.equals("") && !data.equals("none")){
-        try{
-        offset = Double.parseDouble(data.substring(8,data.indexOf("distance")));
-        distance = Double.parseDouble(data.substring(data.indexOf("distance")+10));
-        if(distance > 2000)
-          distance = -1;   
+    //   //System.out.println(data);
+    //   if(data.equals("none")){
+    //     offset = 0.0;
+    //     distance = -1.0;
+    //   }
+    //   if(!data.equals("") && !data.equals("none")){
+    //     try{
+    //     offset = Double.parseDouble(data.substring(8,data.indexOf("distance")));
+    //     distance = Double.parseDouble(data.substring(data.indexOf("distance")+10));
+    //     if(distance > 2000)
+    //       distance = -1;   
         
         
-        else{
-          lastData = java.lang.System.currentTimeMillis();
-        }
-      }
-        catch (Exception e){
-          e.printStackTrace();
-        }
-      }
+    //     else{
+    //       lastData = java.lang.System.currentTimeMillis();
+    //     }
+    //   }
+    //     catch (Exception e){
+    //       e.printStackTrace();
+    //     }
+    //   }
         
-    }
+    // }
 
     private double clamp(double input){
       if(input>RobotMap.MAXVISIONSPEED)

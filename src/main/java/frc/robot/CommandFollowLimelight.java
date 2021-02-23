@@ -3,8 +3,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class CommandFollowVision extends Command {
-    public CommandFollowVision(){
+public class CommandFollowLimelight extends Command {
+    public CommandFollowLimelight(){
         super.requires(Robot.hazyMecBase);
     }
     
@@ -16,7 +16,9 @@ public class CommandFollowVision extends Command {
     @Override
     protected void execute(){
         //Robot.hazyMecBase.readData();
-        Robot.hazyMecBase.goToTarget();
+        //Robot.hazyMecBase.getLimelightData();
+        Robot.hazyMecBase.calculateDistance();
+        Robot.hazyMecBase.limeGoToTarget();
 
         //System.out.println("Pressed End Arm Down");
     }

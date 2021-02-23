@@ -15,7 +15,7 @@ public class CommandTurnVision extends Command {
 
     @Override
     protected void execute(){
-        Robot.hazyMecBase.readData();
+        //Robot.hazyMecBase.readData();
         Robot.hazyMecBase.turnToTarget();
 
         //System.out.println("Pressed End Arm Down");
