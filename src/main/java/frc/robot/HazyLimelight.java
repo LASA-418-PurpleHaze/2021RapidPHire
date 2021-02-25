@@ -18,7 +18,7 @@ public class HazyLimelight extends Subsystem {
   //Measurements for Distance Calculation
   double heightOfTarget = 98.0;
   double heightOfCamera = 22.0;
-  double angleOfCamera = 13.0;
+  double angleOfCamera = Math.toRadians(13.0);
 
   public HazyLimelight() {
     Robot.table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -40,12 +40,15 @@ public class HazyLimelight extends Subsystem {
   }
 
   public void calculateDistance() {
-    double angleFromVision =yOffset;
+    NetworkTableEntry ty = Robot.table.getEntry("ty");
+    double y = ty.getDouble(0.0);
+    double angleFromVision = Math.toRadians(y);
+    //System.out.println("ANGLEFROMVISION: " + angleFromVision);
     distanceToTarget = (heightOfTarget-heightOfCamera) / Math.tan(angleOfCamera + angleFromVision);
   }
 
   public void printData(){
-    System.out.println("xOffset: " + xOffset + " yOffset: " + yOffset + " Distance to target: " + distanceToTarget);
+    //System.out.println("xOffset: " + xOffset + " yOffset: " + yOffset + " Distance to target: " + distanceToTarget);
   }
   
 

@@ -2,8 +2,8 @@
 package frc.robot;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class CommandMecanum extends Command {
-    public CommandMecanum(){
+public class CommandMecanumStrafe extends Command {
+    public CommandMecanumStrafe(){
         super.requires(Robot.hazyMecBase);
     }
 
@@ -15,15 +15,13 @@ public class CommandMecanum extends Command {
 
     @Override
     protected void execute(){
-        Robot.hazyMecBase.driveCartesian(-1* OI.getLeftX(), OI.getLeftY(), -1 * OI.getRightX());
-        //Robot.hazyMecBase.readData();
-        //Robot.solenoidToLight.set(false);
-        Robot.table.getEntry("ledMode").setNumber(1);
+        Robot.hazyMecBase.driveCartesian(-1* OI.getLeftX(), 0.0, -1 * OI.getRightX());
+        
     }
 
     @Override
     protected boolean isFinished(){
-        return false;
+        return true;
     }
 
     @Override

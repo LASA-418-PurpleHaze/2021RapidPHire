@@ -23,7 +23,6 @@ public class HazyMecBase extends Subsystem{
     private double offset; 
     private boolean delayed;
     private boolean turnDelay;
-    private double distanceToTarget;
     private double milStart;
     private double lastData;
     public static HazyMecBase instance;
@@ -139,13 +138,6 @@ public class HazyMecBase extends Subsystem{
     }
 
     // New Limelight Test Stuff
-    
-   
-
-    public void calculateDistance() {
-      double angleFromVision = Robot.hazyLimelight.yOffset;
-      distanceToTarget = (heightOfTarget-heightOfCamera) / Math.tan(angleOfCamera + angleFromVision);
-    }
 
     public void limeTurnToTarget(){
       Robot.table.getEntry("ledMode").setNumber(3);
@@ -158,33 +150,41 @@ public class HazyMecBase extends Subsystem{
         delayed = false;
       }
       if(java.lang.System.currentTimeMillis() > milStart + RobotMap.VISIONDELAY){
-        double turnPower = RobotMap.VISIONVELTURN * (Robot.hazyLimelight.xOffset-RobotMap.RIGHTSIDEOFFSET);
-        rightFrontTalon.set(ControlMode.Velocity,turnPower);
-        rightBackTalon.set(ControlMode.Velocity,turnPower);
-        leftFrontTalon.set(ControlMode.Velocity,turnPower);
-        leftBackTalon.set(ControlMode.Velocity,turnPower);
+        double offset = Robot.hazyLimelight.xOffset;
+        double turnPower = clamp(RobotMap.VISIONTURN * offset);
+        System.out.println("THIS IS OFFSET: " + offset);
+        if(turnPower > -0.2 && turnPower < 0.0)
+          turnPower = -0.2;
+        else if(turnPower < 0.2 && turnPower > 0.0)
+          turnPower = 0.2;
+        
+        if(Math.abs(offset) < 2.0)
+          turnPower = 0.0;
+        
+        driveCartesian(0, 0, -turnPower);
       }
     }
 
     public void limeGoToTarget(){
-      Robot.solenoidToLight.set(true);
-      //System.out.println("Got HERE");
 
       if (delayed){
         milStart = java.lang.System.currentTimeMillis();
         delayed = false;
       }
+
       if(java.lang.System.currentTimeMillis() > milStart + RobotMap.VISIONDELAY){
-        //distance = calculateDistance();
-        //System.out.println("THIS IS DISTANCE: " + distanceToTarget);
+        double distance = Robot.hazyLimelight.distanceToTarget;
+        double offset = Robot.hazyLimelight.xOffset;
+        //System.out.println("THIS IS DISTANCE: " + distance);
         double travelDistance;
-        if(distanceToTarget == -1.0)
+        if(distance < 0.0)
           travelDistance = 0.0;
         else
-          travelDistance = RobotMap.SHOOTDISTANCE - distanceToTarget;
+          travelDistance = RobotMap.SHOOTDISTANCE - distance;
         //System.out.println("THIS IS TRAVEL DISTANCE: " + travelDistance);
         //System.out.println(java.lang.System.currentTimeMillis()-lastData);
-        double turnPower = clamp(RobotMap.VISIONTURN * Robot.hazyLimelight.xOffset);
+        double turnPower = clamp(RobotMap.VISIONTURN * offset);
+        System.out.println("THIS IS OFFSET: " + offset);
         if(turnPower > -0.13 && turnPower < 0.0 && Math.abs(offset) >= 3.0)
           turnPower = -0.13;
         else if(turnPower < 0.13 && turnPower > 0.0 && Math.abs(offset) >= 3.0)
@@ -193,7 +193,7 @@ public class HazyMecBase extends Subsystem{
         if(Math.abs(offset) < 3.0)
           turnPower = 0.0;
         
-        double forwardPower =clamp(-travelDistance*RobotMap.VISIONSPEED);
+        double forwardPower =clamp(travelDistance*RobotMap.VISIONSPEED);
         //System.out.println("turn: " + turnPower + " forward: " + forwardPower);
         driveCartesian(0, forwardPower, -turnPower);
       }

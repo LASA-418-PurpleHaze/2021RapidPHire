@@ -17,9 +17,9 @@ public class CommandFollowLimelight extends Command {
     protected void execute(){
         //Robot.hazyMecBase.readData();
         //Robot.hazyMecBase.getLimelightData();
-        Robot.hazyMecBase.calculateDistance();
+        //Robot.hazyMecBase.calculateDistance();
         Robot.hazyMecBase.limeGoToTarget();
-
+        Robot.table.getEntry("ledMode").setNumber(3);
         //System.out.println("Pressed End Arm Down");
     }
 

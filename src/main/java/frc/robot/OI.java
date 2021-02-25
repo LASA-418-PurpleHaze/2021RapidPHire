@@ -37,10 +37,11 @@ public class OI{
         controller.getXButton().whenPressed(Robot.commandToggleColorArm);
         controller.getYButton().whenPressed(Robot.commandSpinWheel);
         leftThumbButton.whileHeld(Robot.commandPreciseMecanum);
+        leftMidButton.whileHeld(Robot.commandMecanumStrafe);
         //rightThumbButton.whileHeld(Robot.commandFollowVision);
         rightThumbButton.whileHeld(Robot.commandFollowLimelight);
         rightThumbButton.whenInactive(Robot.commandToggleDelay);
-        //rightMidButton.whileHeld(Robot.commandTurnVision);
+        rightMidButton.whileHeld(Robot.commandTurnLimelight);
         //rightMidButton.whenInactive(Robot.commandToggleTurnDelay);
 
     }

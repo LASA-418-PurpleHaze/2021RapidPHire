@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
   public static HazyMecBase hazyMecBase; 
   public static CommandMecanum commandMecanum;
   public static CommandPreciseMecanum commandPreciseMecanum;
+  public static CommandMecanumStrafe commandMecanumStrafe;
   public static CommandToggleDelay commandToggleDelay;
   public static CommandTurnVision commandTurnVision;
   public static CommandToggleTurnDelay commandToggleTurnDelay;
@@ -88,6 +89,7 @@ public class Robot extends TimedRobot {
   public static NetworkTable table; 
   public static CommandLimelight commandLimelight;
   public static CommandFollowLimelight commandFollowLimelight;
+  public static CommandTurnLimelight commandTurnLimelight;
   
 
   
@@ -114,6 +116,7 @@ public class Robot extends TimedRobot {
     hazyMecBase = new HazyMecBase();
     commandMecanum = new CommandMecanum();
     commandPreciseMecanum = new CommandPreciseMecanum();
+    commandMecanumStrafe = new CommandMecanumStrafe();
     commandToggleDelay = new CommandToggleDelay();
     commandTurnVision = new CommandTurnVision();
     commandToggleTurnDelay = new CommandToggleTurnDelay();
@@ -122,6 +125,7 @@ public class Robot extends TimedRobot {
     hazyLimelight = new HazyLimelight();
     commandLimelight = new CommandLimelight();
     commandFollowLimelight = new CommandFollowLimelight();
+    commandTurnLimelight = new CommandTurnLimelight();
 
     //Initialization Code for the Color Sensor and Arm
     hazyColorSensor = new HazyColorSensor();
